@@ -1,11 +1,16 @@
-import axios from "axios";
+export interface IAxiosInstance {
+  get: (url: string) => Promise<any>
+}
 
 export class NameApiService {
   private MAX_LENGTH = 4;
-  public constructor() {}
+  private axios: IAxiosInstance
+  public constructor(axios: IAxiosInstance) {
+    this.axios = axios
+  }
 
   public async getFirstName(): Promise<string> {
-    const { data } = await axios.get(
+    const { data } = await this.axios.get(
       "https://random-data-api.com/api/name/random_name"
     );
     const firstName = data.first_name as string;

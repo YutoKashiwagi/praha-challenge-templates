@@ -7,10 +7,8 @@ describe('sumOfArray', () => {
     expect(sumOfArray([1, 2, 3, 4])).toEqual(10)
   })
 
-  test('配列が空の場合、例外が発生すること', () => {
-    expect(() => {
-      sumOfArray([])
-    }).toThrow('Reduce of empty array with no initial value')
+  test('配列が空の場合、0が返ること', () => {
+    expect(sumOfArray([])).toEqual(0)
   })
 })
 
@@ -21,10 +19,9 @@ describe('asyncSumOfArray', () => {
     })
   })
 
-  test('配列が空の場合、例外が発生すること', () => {
-    expect.assertions(1)
-    return asyncSumOfArray([]).catch(error => {
-      expect(error.message).toMatch('Reduce of empty array with no initial value')
+  test('配列が空の場合、0が返ること', () => {
+    return asyncSumOfArray([]).then(sum => {
+      expect(sum).toEqual(0)
     })
   })
 

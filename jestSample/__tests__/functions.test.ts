@@ -1,6 +1,6 @@
 import { asyncSumOfArray, sumOfArray, asyncSumOfArraySometimesZero, getFirstNameThrowIfLong } from "../functions"
 import { DatabaseMock } from "../util"
-import { IHttpClient, NameApiService } from '../nameApiService'
+import { NameApiService } from '../nameApiService'
 
 describe('sumOfArray', () => {
   test('配列内の数値の合計を取得できること', () => {
@@ -54,61 +54,34 @@ describe('asyncSumOfArraySometimesZero', () => {
   })
 })
 
+jest.mock('../nameApiService')
+const nameApiServiceMock = NameApiService as jest.Mock
+
 describe('getFirstNameThrowIfLong', () => {
   const maxNameLength = 3
-
+  
+  nameApiServiceMock.mockImplementationOnce(() => {
+    return {
+      getFirstName() {
+        return new Promise(resolve => resolve('aaa'))
+      }
+    }
+  })
   test('maxNameLength以下の文字数のFirstNameの場合、FirstNameを取得できること', () => {
-    // モック
-    const response = () => {
-      return {
-        data: {
-          first_name: "aaa"
-        }
-      }
-    }  
-    const get = jest.fn((url: string) => {
-      return new Promise((resolve) => {
-        resolve(response())
-      })
-    })  
-    const HttpClientMock = jest.fn<IHttpClient, any>().mockImplementation(() => {
-      return {
-        get
-      }
-    })
-    const httpClient: IHttpClient = new HttpClientMock()
-    const nameApiService = new NameApiService(httpClient)
-
-    // テスト
-    return getFirstNameThrowIfLong(maxNameLength, nameApiService).then(firstName => {
+    return getFirstNameThrowIfLong(maxNameLength, new nameApiServiceMock).then(firstName => {
       expect(firstName).toEqual("aaa")
     })
   })
 
+  nameApiServiceMock.mockImplementationOnce(() => {
+    return {
+      getFirstName() {
+        return new Promise(resolve => resolve('aaaaaa'))
+      }
+    }
+  })
   test('最大文字数を超過した場合、エラーが発生すること', () => {
-    // モック
-    const response = () => {
-      return {
-        data: {
-          first_name: "aaaa"
-        }
-      }
-    }  
-    const get = jest.fn((url: string) => {
-      return new Promise((resolve) => {
-        resolve(response())
-      })
-    })  
-    const HttpClientMock = jest.fn<IHttpClient, any>().mockImplementation(() => {
-      return {
-        get
-      }
-    })
-    const httpClient: IHttpClient = new HttpClientMock()
-    const nameApiService = new NameApiService(httpClient)
-
-    // テスト
-    return getFirstNameThrowIfLong(maxNameLength, nameApiService).catch(error => {
+    return getFirstNameThrowIfLong(maxNameLength, new nameApiServiceMock()).catch(error => {
       expect(error.message).toMatch("first_name too long")
     })
   })

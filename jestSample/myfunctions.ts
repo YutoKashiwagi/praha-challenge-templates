@@ -1,5 +1,14 @@
-// 境界値のテスト
+// バリデーションのテスト
+const isValidName = (name: string) => {
+  return (name.length > 0) && (name.length >= 4)
+}
 
-// APIクライアントのテスト
+// voidのテスト
+const checkName = (name: string) => {
+  
+}
 
-// モックと条件分岐が複雑なテスト
+// filterのテスト
+const filterUser = (users) = {
+  
+}

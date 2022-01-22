@@ -1,6 +1,6 @@
 import { asyncSumOfArray, sumOfArray, asyncSumOfArraySometimesZero, getFirstNameThrowIfLong } from "../functions"
 import { DatabaseMock } from "../util"
-import { IAxiosInstance, NameApiService } from '../nameApiService'
+import { IHttpClient, NameApiService } from '../nameApiService'
 
 describe('sumOfArray', () => {
   test('配列内の数値の合計を取得できること', () => {
@@ -71,13 +71,13 @@ describe('getFirstNameThrowIfLong', () => {
         resolve(response())
       })
     })  
-    const AxiosMock = jest.fn<IAxiosInstance, any>().mockImplementation(() => {
+    const HttpClientMock = jest.fn<IHttpClient, any>().mockImplementation(() => {
       return {
         get
       }
     })
-    const axios: IAxiosInstance = new AxiosMock()
-    const nameApiService = new NameApiService(axios)
+    const httpClient: IHttpClient = new HttpClientMock()
+    const nameApiService = new NameApiService(httpClient)
 
     // テスト
     return getFirstNameThrowIfLong(maxNameLength, nameApiService).then(firstName => {
@@ -99,13 +99,13 @@ describe('getFirstNameThrowIfLong', () => {
         resolve(response())
       })
     })  
-    const AxiosMock = jest.fn<IAxiosInstance, any>().mockImplementation(() => {
+    const HttpClientMock = jest.fn<IHttpClient, any>().mockImplementation(() => {
       return {
         get
       }
     })
-    const axios: IAxiosInstance = new AxiosMock()
-    const nameApiService = new NameApiService(axios)
+    const httpClient: IHttpClient = new HttpClientMock()
+    const nameApiService = new NameApiService(httpClient)
 
     // テスト
     return getFirstNameThrowIfLong(maxNameLength, nameApiService).catch(error => {

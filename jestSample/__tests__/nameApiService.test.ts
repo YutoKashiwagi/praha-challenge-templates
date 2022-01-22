@@ -1,5 +1,5 @@
 import { NameApiService } from "../nameApiService"
-import type { IAxiosInstance } from "../nameApiService"
+import type { IHttpClient } from "../nameApiService"
 
 describe('getFirstName', () => {
   test('5文字未満の場合、firstNameを返すこと', () => {
@@ -16,13 +16,13 @@ describe('getFirstName', () => {
         resolve(response())
       })
     })  
-    const AxiosMock = jest.fn<IAxiosInstance, any>().mockImplementation(() => {
+    const HttpClientMock = jest.fn<IHttpClient, any>().mockImplementation(() => {
       return {
         get
       }
     })
-    const axios: IAxiosInstance = new AxiosMock()
-    const nameApiService = new NameApiService(axios)
+    const httpClient: IHttpClient = new HttpClientMock()
+    const nameApiService = new NameApiService(httpClient)
 
     // アサーション
     return nameApiService.getFirstName().then(fetchedName => {
@@ -46,13 +46,13 @@ describe('getFirstName', () => {
         resolve(response())
       })
     })
-    const AxiosMock = jest.fn<IAxiosInstance, any>().mockImplementation(() => {
+    const HttpClientMock = jest.fn<IHttpClient, any>().mockImplementation(() => {
       return {
         get
       }
     })
-    const axios: IAxiosInstance = new AxiosMock()
-    const nameApiService = new NameApiService(axios)
+    const httpClient: IHttpClient = new HttpClientMock()
+    const nameApiService = new NameApiService(httpClient)
 
     // アサーション
     return nameApiService.getFirstName().catch(error => {
